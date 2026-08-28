@@ -34,7 +34,7 @@ type ConsumerConfig struct {
 	Group string
 	// Topic is the topic to consume from. Leave empty for producer-only
 	// deployments.
-	Topic string
+	Topics []string
 	// DLQTopic is the dead-letter queue topic. Leave empty for producer-only
 	// deployments.
 	DLQTopic string
@@ -74,14 +74,21 @@ func (c KafkaConfig) Validate() error {
 
 	// Validate consumer config only if a consumer group is configured.
 	if c.Consumer.Group != "" {
-		if strings.TrimSpace(c.Consumer.Topic) == "" {
+		if len(c.Consumer.Topics) == 0 {
 			return fmt.Errorf("kafka.consumer.topic must not be empty when consumer.group is set")
+		}
+		for i, topic := range c.Consumer.Topics {
+			topic = strings.TrimSpace(topic)
+			if topic == "" {
+				return fmt.Errorf("kafka.consumer.topics[%d] must not be empty", i)
+			}
+
+			if topic == c.Consumer.DLQTopic {
+				return fmt.Errorf("kafka.consumer.topics[%d] must not be the same as kafka.consumer.dlq_topic", i)
+			}
 		}
 		if c.Consumer.DLQTopic == "" {
 			return fmt.Errorf("kafka.consumer.dlq_topic must not be empty when consumer.group is set")
-		}
-		if c.Consumer.Topic == c.Consumer.DLQTopic {
-			return fmt.Errorf("kafka.consumer.topic and kafka.consumer.dlq_topic must be different")
 		}
 		retry := c.Consumer.Retry
 		if retry.MaxAttempts < 1 {

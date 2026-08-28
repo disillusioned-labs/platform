@@ -57,6 +57,7 @@ func New(
 	if cfg.Consumer.Group != "" {
 		defaultOpts = append(defaultOpts,
 			kgo.ConsumerGroup(cfg.Consumer.Group),
+			kgo.ConsumeTopics(cfg.Consumer.Topics...),
 			kgo.DisableAutoCommit(),
 		)
 	}
