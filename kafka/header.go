@@ -1,6 +1,12 @@
 package kafka
 
-import "strings"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+
+	"github.com/google/uuid"
+)
 
 // HeaderCarrier adapts Kafka headers to the OpenTelemetry propagation
 // TextMapCarrier interface.
@@ -78,4 +84,48 @@ func HeaderString(
 	}
 
 	return string(value), true
+}
+
+// RequiredHeader returns a Kafka header value or an error if missing or empty.
+func RequiredHeader(headers []RecordHeader, key string) (string, error) {
+	value, ok := HeaderString(headers, key)
+	if !ok || value == "" {
+		return "", fmt.Errorf("missing required header %q", key)
+	}
+	return value, nil
+}
+
+// RequiredUUIDHeader returns a Kafka header value parsed as a UUID.
+func RequiredUUIDHeader(headers []RecordHeader, key string) (uuid.UUID, error) {
+	value, err := RequiredHeader(headers, key)
+	if err != nil {
+		return uuid.Nil, err
+	}
+	id, err := uuid.Parse(value)
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("invalid header %q: %w", key, err)
+	}
+	return id, nil
+}
+
+// RequiredIntHeader returns a Kafka header value parsed as an integer.
+func RequiredIntHeader(headers []RecordHeader, key string) (int, error) {
+	value, err := RequiredHeader(headers, key)
+	if err != nil {
+		return 0, err
+	}
+	version, err := strconv.Atoi(value)
+	if err != nil {
+		return 0, fmt.Errorf("invalid header %q: %w", key, err)
+	}
+	return version, nil
+}
+
+// OptionalHeader returns a Kafka header value as *string, nil if missing.
+func OptionalHeader(headers []RecordHeader, key string) *string {
+	value, ok := HeaderString(headers, key)
+	if !ok || value == "" {
+		return nil
+	}
+	return &value
 }
