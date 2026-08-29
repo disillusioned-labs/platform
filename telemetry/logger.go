@@ -77,6 +77,9 @@ func (h traceHandler) Handle(ctx context.Context, r slog.Record) error {
 			slog.String("span_id", sc.SpanID().String()),
 		)
 	}
+	if requestID := RequestIDFrom(ctx); requestID != "" {
+		r.AddAttrs(slog.String("request_id", requestID))
+	}
 	return h.Handler.Handle(ctx, r)
 }
 

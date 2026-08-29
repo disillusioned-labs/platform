@@ -1,5 +1,7 @@
 package kafka
 
+import "context"
+
 // Record is the application-facing Kafka record.
 //
 // The application layer must not depend on franz-go types. Kafka-specific
@@ -12,6 +14,12 @@ type Record struct {
 	Key       []byte
 	Value     []byte
 	Headers   []RecordHeader
+
+	// Context carries the trace context extracted from the record headers
+	// (the "receive" span started by kotel). Processing code must continue
+	// from it so consume-side spans join the producer's trace; it is nil for
+	// records that arrived without a traceparent.
+	Context context.Context
 }
 
 // RecordHeader is the application-facing Kafka record header.
@@ -41,6 +49,7 @@ func (r Record) Clone() Record {
 		Key:       append([]byte(nil), r.Key...),
 		Value:     append([]byte(nil), r.Value...),
 		Headers:   cloneHeaders(r.Headers),
+		Context:   r.Context,
 	}
 }
 

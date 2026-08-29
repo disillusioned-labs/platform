@@ -101,5 +101,6 @@ func fromKGORecord(record *kgo.Record) Record {
 		Key:       append([]byte(nil), record.Key...),
 		Value:     append([]byte(nil), record.Value...),
 		Headers:   headers,
+		Context:   record.Context,
 	}
 }
