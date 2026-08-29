@@ -8,8 +8,10 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/time/rate"
 )
@@ -25,6 +27,9 @@ type Verifier struct {
 	stop         chan struct{}
 
 	errorHandler ErrorHandler
+
+	denylist           Denylist
+	denylistFailOpened metric.Int64Counter
 }
 
 func New(cfg Config, opts ...Option) *Verifier {
@@ -40,6 +45,17 @@ func New(cfg Config, opts ...Option) *Verifier {
 		tracer:       s.tracer,
 		stop:         make(chan struct{}),
 		errorHandler: s.errorHandler,
+		denylist:     s.denylist,
+	}
+
+	if s.denylist != nil {
+		meter := otel.Meter("github.com/disillusioned-labs/platform/authkit")
+		counter, err := meter.Int64Counter("authkit.denylist.fail_open")
+		if err != nil {
+			s.log.Warn("authkit: denylist fail-open counter unavailable", "error", err)
+		} else {
+			v.denylistFailOpened = counter
+		}
 	}
 
 	limiter := rate.NewLimiter(rate.Every(s.unknownKidRate), s.unknownKidBurst)
@@ -101,11 +117,43 @@ func (v *Verifier) Verify(ctx context.Context, raw string) (Claims, error) {
 		v.log.WarnContext(ctx, "authkit: invalid token claims", "error", err)
 		return Claims{}, err
 	}
+
+	if err := v.checkDenylist(ctx, c); err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
+		v.log.WarnContext(ctx, "authkit: token issued before revocation", "subject", c.Subject)
+		return Claims{}, err
+	}
+
 	span.SetAttributes(
 		attribute.String("authkit.subject", c.Subject),
 		attribute.String("authkit.org_id", c.OrgID),
 	)
 	return c, nil
+}
+
+// checkDenylist rejects tokens issued before the latest revocation of their
+// subject. A denylist outage fails open - the request proceeds and protection
+// degrades back to the access-token lifetime window - and the degradation is
+// counted so alerting can see it.
+func (v *Verifier) checkDenylist(ctx context.Context, c Claims) error {
+	if v.denylist == nil {
+		return nil
+	}
+
+	revokedAt, err := v.denylist.RevokedAt(ctx, RevokeKeys(c.Subject, c.OrgID)...)
+	if err != nil {
+		v.log.ErrorContext(ctx, "authkit: denylist unavailable, failing open", "error", err)
+		if v.denylistFailOpened != nil {
+			v.denylistFailOpened.Add(ctx, 1)
+		}
+		return nil
+	}
+
+	if !revokedAt.IsZero() && !c.IssuedAt.After(revokedAt) {
+		return ErrRevoked
+	}
+	return nil
 }
 
 func (v *Verifier) Bootstrap(ctx context.Context) error {

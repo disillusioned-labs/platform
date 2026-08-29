@@ -29,6 +29,7 @@ type settings struct {
 	unknownKidBurst int
 	clockSkew       time.Duration
 	keySource       KeySource
+	denylist        Denylist
 	errorHandler    ErrorHandler
 	log             *slog.Logger
 	tracer          trace.Tracer
@@ -74,6 +75,14 @@ func WithClockSkew(d time.Duration) Option {
 func WithKeySource(source KeySource) Option {
 	return func(s *settings) {
 		s.keySource = source
+	}
+}
+
+// WithDenylist enables the revocation check after signature verification. A
+// nil denylist (the default) skips the check entirely.
+func WithDenylist(denylist Denylist) Option {
+	return func(s *settings) {
+		s.denylist = denylist
 	}
 }
 
