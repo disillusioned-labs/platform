@@ -56,6 +56,21 @@ func TextValue(t pgtype.Text) string {
 	return t.String
 }
 
+func StringPtr(s string) *string {
+	if s == "" {
+		return nil
+	}
+	v := s
+	return &v
+}
+
+func TimeValue(t pgtype.Timestamptz) string {
+	if !t.Valid {
+		return ""
+	}
+	return t.Time.Format(time.RFC3339)
+}
+
 func Time(t *time.Time) pgtype.Timestamptz {
 	if t == nil {
 		return pgtype.Timestamptz{}
