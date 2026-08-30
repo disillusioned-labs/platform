@@ -19,6 +19,28 @@ func String(s string) pgtype.Text {
 	return pgtype.Text{String: s, Valid: true}
 }
 
+func TextFromString(s string) pgtype.Text {
+	if s == "" {
+		return pgtype.Text{}
+	}
+	return pgtype.Text{String: s, Valid: true}
+}
+
+func Int4(v int32) pgtype.Int4 {
+	if v == 0 {
+		return pgtype.Int4{}
+	}
+	return pgtype.Int4{Int32: v, Valid: true}
+}
+
+func Int4Ptr(v pgtype.Int4) *int32 {
+	if !v.Valid {
+		return nil
+	}
+	val := v.Int32
+	return &val
+}
+
 func TextPtr(t pgtype.Text) *string {
 	if !t.Valid {
 		return nil
