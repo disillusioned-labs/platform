@@ -71,9 +71,6 @@ type HTTPClient struct {
 
 	tracer trace.Tracer
 
-	// callDuration times a whole logical Do call.
-	callDuration metric.Float64Histogram
-
 	// callsFailedCounter counts Do calls that returned a non-nil error to
 	// the caller.
 	callsFailedCounter metric.Int64Counter
@@ -85,6 +82,14 @@ type HTTPClient struct {
 	// WithMaxResponseSize.
 	responseTooLargeCounter metric.Int64Counter
 }
+
+// Telemetry layering: every Do call produces exactly ONE span (the package's
+// own, built in Do). Duration is NOT re-measured here - the otelhttp
+// transport already records http.client.request.duration in seconds per the
+// stable OTel semantic conventions, and a histogram in this package would
+// emit two duration series for one call. What remains here are the
+// instruments otelhttp cannot know about: logical failures, in-flight calls,
+// and responses rejected by the size cap.
 
 // Option configures an HTTPClient.
 type Option func(*HTTPClient)
@@ -127,14 +132,6 @@ func WithMeterProvider(mp metric.MeterProvider) Option {
 			return
 		}
 		meter := mp.Meter(instrumentationName)
-
-		callDuration, err := meter.Float64Histogram(
-			"http.client.call.duration",
-			metric.WithDescription("Duration of one HTTPClient.Do call"),
-			metric.WithUnit("ms"),
-		)
-		handleErr(err)
-		c.callDuration = callDuration
 
 		callsFailedCounter, err := meter.Int64Counter(
 			"http.client.calls.failed",
@@ -182,16 +179,21 @@ func NewHTTPClient(client Doer, opts ...Option) *HTTPClient {
 	for _, opt := range opts {
 		opt(c)
 	}
-	if c.callDuration == nil {
+	if c.callsFailedCounter == nil {
 		WithMeterProvider(otel.GetMeterProvider())(c)
 	}
 	return c
 }
 
-// WrapTransport wraps rt with otelhttp so requests sent through it get a
-// client span and W3C trace-context propagation headers.
+// WrapTransport wraps rt with otelhttp so requests sent through it get W3C
+// trace-context propagation plus the semconv http.client.request.duration
+// metric (seconds). Its own span is silenced with a no-op tracer provider:
+// spans come from HTTPClient.Do, so one call produces exactly one span -
+// without this, every call would carry a duplicate transport-level span.
 func WrapTransport(rt http.RoundTripper) http.RoundTripper {
-	return otelhttp.NewTransport(rt)
+	return otelhttp.NewTransport(rt,
+		otelhttp.WithTracerProvider(trace.NewNoopTracerProvider()),
+	)
 }
 
 // Do executes an HTTP request with JSON body marshaling and a bounded
@@ -215,7 +217,10 @@ func (c *HTTPClient) Do(
 		trace.WithSpanKind(trace.SpanKindClient),
 		trace.WithAttributes(
 			semconv.HTTPRequestMethodKey.String(method),
-			semconv.URLFull(url),
+			// Query string is redacted: query params are the most common
+			// place for tokens and API keys to travel (access_token=...),
+			// and they must never reach span attributes.
+			semconv.URLFull(safeURL(url)),
 		),
 	)
 	defer span.End()
@@ -225,9 +230,7 @@ func (c *HTTPClient) Do(
 	c.callsInFlight.Add(ctx, 1, methodAttr)
 	defer c.callsInFlight.Add(ctx, -1, methodAttr)
 
-	start := time.Now()
 	defer func() {
-		c.callDuration.Record(ctx, float64(time.Since(start).Milliseconds()), methodAttr)
 		if err != nil {
 			c.callsFailedCounter.Add(ctx, 1, metric.WithAttributes(
 				semconv.HTTPRequestMethodKey.String(method),
@@ -306,6 +309,23 @@ func spanName(method, rawURL string) string {
 		return method
 	}
 	return method + " " + u.Host + u.Path
+}
+
+// safeURL renders a URL without its query string and userinfo, so secrets
+// travelling in either place never reach span attributes. Unparseable input
+// is returned as-is - the request itself will fail downstream anyway.
+func safeURL(rawURL string) string {
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return rawURL
+	}
+	if u.RawQuery == "" && u.User == nil {
+		return rawURL
+	}
+	clone := *u
+	clone.RawQuery = ""
+	clone.User = nil
+	return clone.String()
 }
 
 func marshalBody(body any) ([]byte, error) {
