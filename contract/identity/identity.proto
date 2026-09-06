@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package identity.v1;
+
+option go_package = "github.com/disillusioned-labs/platform/contract/identity;identitypb";
+
+service IdentityService {
+  rpc IsMemberActive(IsMemberActiveRequest) returns (IsMemberActiveResponse);
+  rpc GetMemberRole(GetMemberRoleRequest) returns (GetMemberRoleResponse);
+  rpc GetUsersInfo(GetUsersInfoRequest) returns (GetUsersInfoResponse);
+  rpc GetOrgStatus(GetOrgStatusRequest) returns (GetOrgStatusResponse);
+  rpc IsServiceAccessAllowed(IsServiceAccessAllowedRequest) returns (IsServiceAccessAllowedResponse);
+}
+
+// IsMemberActive
+message IsMemberActiveRequest {
+  string organization_id = 1;
+  string user_id = 2;
+}
+
+message IsMemberActiveResponse {
+  bool   is_active = 1;  // true = active, false = removed/left/deleted
+  string role = 2;  // "owner" | "admin" | "member"
+}
+
+// GetMemberRole
+message GetMemberRoleRequest {
+  string organization_id = 1;
+  string user_id = 2;
+}
+
+message GetMemberRoleResponse {
+  string role = 1;  // "owner" | "admin" | "member"
+}
+
+// GetUsersInfo
+message GetUsersInfoRequest {
+  repeated string user_ids = 1;  // batch UUID users
+}
+
+message GetUsersInfoResponse {
+  repeated UserInfo users = 1;
+}
+
+message UserInfo {
+  string user_id = 1;
+  string name = 2;
+  string email = 3;
+  string role = 4;  //  organization role
+  bool   is_active = 5;
+}
+
+// GetOrgStatus
+message GetOrgStatusRequest {
+  string organization_id = 1;
+}
+
+message GetOrgStatusResponse {
+  bool   is_frozen = 1;
+  bool   is_deleted = 2;
+}
+
+// IsServiceAccessAllowed
+message IsServiceAccessAllowedRequest {
+  string user_id = 1;
+  string organization_id = 2;
+  string service_name = 3;
+}
+
+message IsServiceAccessAllowedResponse {
+  bool allowed = 1;
+}
