@@ -6,7 +6,232 @@ import (
 	"net/url"
 	"slices"
 	"strings"
+	"time"
 )
+
+// ValidateServer validates the common HTTP server configuration.
+func ValidateServer(c *ServerConfig) error {
+	var errs []error
+	fail := func(format string, args ...any) {
+		errs = append(errs, fmt.Errorf(format, args...))
+	}
+
+	if c.Port < 1 || c.Port > 65535 {
+		fail(
+			"server.port must be between 1 and 65535, got %d",
+			c.Port,
+		)
+	}
+
+	for _, d := range []struct {
+		key   string
+		value time.Duration
+	}{
+		{"server.read_timeout", c.ReadTimeout},
+		{"server.write_timeout", c.WriteTimeout},
+		{"server.idle_timeout", c.IdleTimeout},
+		{"server.shutdown_timeout", c.ShutdownTimeout},
+		{"server.request_timeout", c.RequestTimeout},
+	} {
+		if d.value <= 0 {
+			fail(
+				"%s must be > 0, got %s",
+				d.key,
+				d.value,
+			)
+		}
+	}
+
+	if c.DrainDelay < 0 {
+		fail(
+			"server.drain_delay must not be negative, got %s",
+			c.DrainDelay,
+		)
+	}
+
+	return errors.Join(errs...)
+}
+
+// ValidateGRPC validates the gRPC server configuration.
+func ValidateGRPC(c *GRPCConfig) error {
+	var errs []error
+	fail := func(format string, args ...any) {
+		errs = append(errs, fmt.Errorf(format, args...))
+	}
+
+	if c.ServerPort < 1 || c.ServerPort > 65535 {
+		fail(
+			"grpc.server_port must be between 1 and 65535, got %d",
+			c.ServerPort,
+		)
+	}
+
+	if c.MaxRecvMsgSize <= 0 {
+		fail(
+			"grpc.max_recv_msg_size must be > 0, got %d",
+			c.MaxRecvMsgSize,
+		)
+	}
+
+	if c.MaxSendMsgSize <= 0 {
+		fail(
+			"grpc.max_send_msg_size must be > 0, got %d",
+			c.MaxSendMsgSize,
+		)
+	}
+
+	if c.MaxHeaderSize <= 0 {
+		fail(
+			"grpc.max_header_size must be > 0, got %d",
+			c.MaxHeaderSize,
+		)
+	}
+
+	if c.UnaryTimeout <= 0 {
+		fail(
+			"grpc.unary_timeout must be > 0, got %s",
+			c.UnaryTimeout,
+		)
+	}
+
+	if err := validateGRPCTLS(&c.TLS); err != nil {
+		errs = append(errs, err)
+	}
+
+	return errors.Join(errs...)
+}
+
+// ValidateGRPCClient validates outbound gRPC client configuration.
+func ValidateGRPCClient(c *GRPCClientConfig) error {
+	var errs []error
+	fail := func(format string, args ...any) {
+		errs = append(errs, fmt.Errorf(format, args...))
+	}
+
+	if strings.TrimSpace(c.Target) == "" {
+		fail("grpc_client.target must not be empty")
+	}
+
+	if c.Timeout <= 0 {
+		fail(
+			"grpc_client.timeout must be > 0, got %s",
+			c.Timeout,
+		)
+	}
+
+	if c.MaxRecvMsgSize <= 0 {
+		fail(
+			"grpc_client.max_recv_msg_size must be > 0, got %d",
+			c.MaxRecvMsgSize,
+		)
+	}
+
+	if c.MaxSendMsgSize <= 0 {
+		fail(
+			"grpc_client.max_send_msg_size must be > 0, got %d",
+			c.MaxSendMsgSize,
+		)
+	}
+
+	if err := validateGRPCClientTLS(&c.TLS); err != nil {
+		errs = append(errs, err)
+	}
+
+	return errors.Join(errs...)
+}
+
+// validateGRPCTLS validates gRPC server TLS configuration.
+//
+// When TLS is enabled, the server requires its certificate and private key.
+// Mutual TLS additionally requires a CA bundle to verify client certificates.
+func validateGRPCTLS(c *GRPCTLSConfig) error {
+	if !c.Enabled {
+		return nil
+	}
+
+	var errs []error
+	fail := func(format string, args ...any) {
+		errs = append(errs, fmt.Errorf(format, args...))
+	}
+
+	if strings.TrimSpace(c.CertFile) == "" {
+		fail(
+			"grpc.tls.cert_file must not be empty when TLS is enabled",
+		)
+	}
+
+	if strings.TrimSpace(c.KeyFile) == "" {
+		fail(
+			"grpc.tls.key_file must not be empty when TLS is enabled",
+		)
+	}
+
+	if c.MutualTLS && strings.TrimSpace(c.CAFile) == "" {
+		fail(
+			"grpc.tls.ca_file must not be empty when mutual TLS is enabled",
+		)
+	}
+
+	return errors.Join(errs...)
+}
+
+// validateGRPCClientTLS validates outbound gRPC client TLS configuration.
+//
+// A TLS client does not require its own certificate unless mutual TLS is
+// enabled. When CAFile is empty, the system trust store is used.
+func validateGRPCClientTLS(c *GRPCTLSConfig) error {
+	if !c.Enabled {
+		return nil
+	}
+
+	var errs []error
+	fail := func(format string, args ...any) {
+		errs = append(errs, fmt.Errorf(format, args...))
+	}
+
+	if c.MutualTLS {
+		if strings.TrimSpace(c.CAFile) == "" {
+			fail(
+				"grpc_client.tls.ca_file must not be empty when mutual TLS is enabled",
+			)
+		}
+
+		if strings.TrimSpace(c.CertFile) == "" {
+			fail(
+				"grpc_client.tls.cert_file must not be empty when mutual TLS is enabled",
+			)
+		}
+
+		if strings.TrimSpace(c.KeyFile) == "" {
+			fail(
+				"grpc_client.tls.key_file must not be empty when mutual TLS is enabled",
+			)
+		}
+	}
+
+	return errors.Join(errs...)
+}
+
+// ValidatePprof validates the common pprof configuration.
+func ValidatePprof(c *PprofConfig) error {
+	if !c.Enabled {
+		return nil
+	}
+
+	var errs []error
+	fail := func(format string, args ...any) {
+		errs = append(errs, fmt.Errorf(format, args...))
+	}
+
+	if c.Port < 1 || c.Port > 65535 {
+		fail(
+			"pprof.port must be between 1 and 65535 when pprof.enabled, got %d",
+			c.Port,
+		)
+	}
+
+	return errors.Join(errs...)
+}
 
 // ValidatePostgres validates the PostgresConfig fields.
 func ValidatePostgres(c *PostgresConfig) error {
@@ -33,6 +258,76 @@ func ValidatePostgres(c *PostgresConfig) error {
 	default:
 		fail("postgres.query_exec_mode must be one of cache_statement|cache_describe|describe_exec|exec|simple_protocol, got %q",
 			c.QueryExecMode)
+	}
+
+	return errors.Join(errs...)
+}
+
+// ValidateRedis validates the common RedisConfig fields.
+func ValidateRedis(c *RedisConfig) error {
+	var errs []error
+	fail := func(format string, args ...any) {
+		errs = append(errs, fmt.Errorf(format, args...))
+	}
+
+	switch c.Mode {
+	case RedisModeDisabled:
+	case RedisModeOptional, RedisModeRequired:
+		if strings.TrimSpace(c.Addr) == "" {
+			fail(
+				"redis.addr must be set when redis.mode is %s",
+				c.Mode,
+			)
+		}
+	default:
+		fail(
+			"redis.mode must be one of disabled|optional|required, got %q",
+			c.Mode,
+		)
+	}
+
+	if c.DB < 0 {
+		fail("redis.db must not be negative, got %d", c.DB)
+	}
+
+	return errors.Join(errs...)
+}
+
+// ValidateCache validates the common CacheConfig fields.
+func ValidateCache(c *CacheConfig) error {
+	if c.DefaultTTL <= 0 {
+		return fmt.Errorf(
+			"cache.default_ttl must be > 0, got %s",
+			c.DefaultTTL,
+		)
+	}
+
+	return nil
+}
+
+// ValidateRateLimit validates the common RateLimitConfig fields.
+func ValidateRateLimit(c *RateLimitConfig) error {
+	var errs []error
+	fail := func(format string, args ...any) {
+		errs = append(errs, fmt.Errorf(format, args...))
+	}
+
+	if !c.Enabled {
+		return nil
+	}
+
+	if c.Requests <= 0 {
+		fail(
+			"ratelimit.requests must be > 0 when ratelimit.enabled, got %d",
+			c.Requests,
+		)
+	}
+
+	if c.Window <= 0 {
+		fail(
+			"ratelimit.window must be > 0 when ratelimit.enabled, got %s",
+			c.Window,
+		)
 	}
 
 	return errors.Join(errs...)
@@ -142,9 +437,10 @@ func ValidateService(c *ServiceConfig) error {
 		errs = append(errs, fmt.Errorf(format, args...))
 	}
 
-	if c.Name == "" {
+	if strings.TrimSpace(c.Name) == "" {
 		fail("service.name must not be empty")
 	}
+
 	switch c.Env {
 	case EnvDevelopment, EnvStaging, EnvProduction:
 	default:
@@ -155,9 +451,11 @@ func ValidateService(c *ServiceConfig) error {
 	return errors.Join(errs...)
 }
 
-// ValidateKafka validates the common KafkaConfig fields (brokers, client_id,
-// ping_timeout). Services that use consumer or producer fields validate those
-// separately.
+// ValidateKafka validates the common KafkaConfig fields.
+//
+// Producer and consumer-specific fields are intentionally not validated here
+// because a service may use only one side. Services should validate the
+// producer or consumer configuration they actually use.
 func ValidateKafka(c *KafkaConfig) error {
 	var errs []error
 	fail := func(format string, args ...any) {
@@ -167,6 +465,7 @@ func ValidateKafka(c *KafkaConfig) error {
 	if len(c.Brokers) == 0 {
 		fail("kafka.brokers must not be empty")
 	}
+
 	for i, broker := range c.Brokers {
 		if strings.TrimSpace(broker) == "" {
 			fail("kafka.brokers[%d] must not be empty", i)
@@ -178,7 +477,102 @@ func ValidateKafka(c *KafkaConfig) error {
 	}
 
 	if c.PingTimeout <= 0 {
-		fail("kafka.ping_timeout must be > 0, got %s", c.PingTimeout)
+		fail(
+			"kafka.ping_timeout must be > 0, got %s",
+			c.PingTimeout,
+		)
+	}
+
+	return errors.Join(errs...)
+}
+
+func ValidateKafkaProducer(c *KafkaProducerConfig) error {
+	var errs []error
+	fail := func(format string, args ...any) {
+		errs = append(errs, fmt.Errorf(format, args...))
+	}
+
+	if c.RecordRetries < 0 {
+		fail(
+			"kafka.producer.record_retries must not be negative, got %d",
+			c.RecordRetries,
+		)
+	}
+
+	if c.RecordDeliveryTimeout <= 0 {
+		fail(
+			"kafka.producer.record_delivery_timeout must be > 0, got %s",
+			c.RecordDeliveryTimeout,
+		)
+	}
+
+	return errors.Join(errs...)
+}
+
+func ValidateKafkaConsumer(c *KafkaConsumerConfig) error {
+	var errs []error
+	fail := func(format string, args ...any) {
+		errs = append(errs, fmt.Errorf(format, args...))
+	}
+
+	if strings.TrimSpace(c.Group) == "" {
+		fail("kafka.consumer.group must not be empty")
+	}
+
+	if len(c.Topics) == 0 {
+		fail("kafka.consumer.topics must not be empty")
+	}
+
+	for i, topic := range c.Topics {
+		if strings.TrimSpace(topic) == "" {
+			fail("kafka.consumer.topics[%d] must not be empty", i)
+		}
+	}
+
+	if strings.TrimSpace(c.DLQTopic) == "" {
+		fail("kafka.consumer.dlq_topic must not be empty")
+	}
+
+	if err := ValidateKafkaRetry(&c.Retry); err != nil {
+		errs = append(errs, err)
+	}
+
+	return errors.Join(errs...)
+}
+
+func ValidateKafkaRetry(c *KafkaRetryConfig) error {
+	var errs []error
+	fail := func(format string, args ...any) {
+		errs = append(errs, fmt.Errorf(format, args...))
+	}
+
+	if c.MaxAttempts < 1 {
+		fail(
+			"kafka.consumer.retry.max_attempts must be >= 1, got %d",
+			c.MaxAttempts,
+		)
+	}
+
+	if c.InitialDelay <= 0 {
+		fail(
+			"kafka.consumer.retry.initial_delay must be > 0, got %s",
+			c.InitialDelay,
+		)
+	}
+
+	if c.MaxDelay <= 0 {
+		fail(
+			"kafka.consumer.retry.max_delay must be > 0, got %s",
+			c.MaxDelay,
+		)
+	}
+
+	if c.InitialDelay > c.MaxDelay {
+		fail(
+			"kafka.consumer.retry.initial_delay (%s) must be <= kafka.consumer.retry.max_delay (%s)",
+			c.InitialDelay,
+			c.MaxDelay,
+		)
 	}
 
 	return errors.Join(errs...)

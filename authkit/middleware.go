@@ -7,7 +7,16 @@ import (
 	"go.opentelemetry.io/otel/codes"
 )
 
-func (v *Verifier) Middleware(next http.Handler) http.Handler {
+type HTTPErrorHandler func(
+	w http.ResponseWriter,
+	r *http.Request,
+	err error,
+)
+
+func (v *Verifier) Middleware(
+	next http.Handler,
+	errorHandler HTTPErrorHandler,
+) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx, span := v.tracer.Start(
 			r.Context(),
@@ -26,13 +35,13 @@ func (v *Verifier) Middleware(next http.Handler) http.Handler {
 				"error", err,
 			)
 
-			v.writeError(w, r, err)
+			v.writeError(w, r, err, errorHandler)
 			return
 		}
 
 		claims, err := v.Verify(ctx, token)
 		if err != nil {
-			v.writeError(w, r, err)
+			v.writeError(w, r, err, errorHandler)
 			return
 		}
 
@@ -65,9 +74,10 @@ func (v *Verifier) writeError(
 	w http.ResponseWriter,
 	r *http.Request,
 	err error,
+	errorHandler HTTPErrorHandler,
 ) {
-	if v.errorHandler != nil {
-		v.errorHandler(w, r, err)
+	if errorHandler != nil {
+		errorHandler(w, r, err)
 		return
 	}
 

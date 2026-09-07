@@ -44,6 +44,83 @@ type ServerConfig struct {
 	DrainDelay time.Duration `mapstructure:"drain_delay"`
 }
 
+// GRPCConfig holds gRPC server transport settings.
+//
+// Transport and security behavior are owned by platform/grpc. This config only
+// contains service-level knobs that operators may need to tune.
+type GRPCConfig struct {
+	// ServerPort is the TCP port used by the gRPC server.
+	ServerPort int `mapstructure:"server_port"`
+
+	// MaxRecvMsgSize and MaxSendMsgSize bound protobuf message sizes.
+	// Defaults should remain conservative; increase only when a contract
+	// explicitly requires larger messages.
+	MaxRecvMsgSize int `mapstructure:"max_recv_msg_size"`
+	MaxSendMsgSize int `mapstructure:"max_send_msg_size"`
+
+	// MaxHeaderSize bounds HTTP/2 header metadata accepted by the server.
+	MaxHeaderSize int `mapstructure:"max_header_size"`
+
+	// UnaryTimeout is applied only when the caller did not already provide
+	// a deadline. Streaming RPCs must define their own lifecycle.
+	UnaryTimeout time.Duration `mapstructure:"unary_timeout"`
+
+	// TLS controls gRPC server transport security.
+	TLS GRPCTLSConfig `mapstructure:"tls"`
+}
+
+// GRPCClientConfig holds outbound gRPC client transport settings.
+//
+// Connection lifecycle, dialing, retries, interceptors, and transport
+// behavior are owned by platform/grpc. This config only contains
+// service-level knobs that operators may need to tune.
+type GRPCClientConfig struct {
+	// Target is the gRPC server target consumed by the configured resolver.
+	// It may use a resolver-specific target such as dns:///host:port.
+	Target string `mapstructure:"target"`
+
+	// Timeout is the default RPC timeout applied when the caller does not
+	// already provide a deadline.
+	Timeout time.Duration `mapstructure:"timeout"`
+
+	// MaxRecvMsgSize and MaxSendMsgSize bound protobuf message sizes.
+	// Defaults should remain conservative; increase only when a contract
+	// explicitly requires larger messages.
+	MaxRecvMsgSize int `mapstructure:"max_recv_msg_size"`
+	MaxSendMsgSize int `mapstructure:"max_send_msg_size"`
+
+	// TLS controls gRPC client transport security.
+	TLS GRPCTLSConfig `mapstructure:"tls"`
+}
+
+// GRPCTLSConfig controls TLS/mTLS for gRPC.
+//
+// In production, TLS should be enabled. Insecure transport must be an
+// explicit platform/grpc option and should only be used for local
+// development or tests.
+type GRPCTLSConfig struct {
+	// Enabled enables TLS transport security.
+	Enabled bool `mapstructure:"enabled"`
+
+	// CAFile contains the trusted CA bundle used to verify peer certificates.
+	// Leave empty to use the system trust store.
+	CAFile string `mapstructure:"ca_file"`
+
+	// CertFile and KeyFile contain the service certificate and private key.
+	// They are required for a TLS-enabled server and for mTLS clients.
+	CertFile string `mapstructure:"cert_file"`
+	KeyFile  string `mapstructure:"key_file"`
+
+	// ServerName overrides TLS server-name verification when required by the
+	// deployment. Leave empty to use the target hostname.
+	ServerName string `mapstructure:"server_name"`
+
+	// MutualTLS requires the peer to present a certificate.
+	// For servers, this enables client certificate verification. For clients,
+	// this requires CertFile and KeyFile to authenticate to the server.
+	MutualTLS bool `mapstructure:"mutual_tls"`
+}
+
 // PprofConfig gates the profiling listener. Disabled means the listener is never
 // created: no socket, no goroutine.
 //

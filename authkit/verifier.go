@@ -5,6 +5,7 @@ import (
 	"crypto/rsa"
 	"errors"
 	"log/slog"
+	"sync"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -25,8 +26,8 @@ type Verifier struct {
 
 	refreshEvery time.Duration
 	stop         chan struct{}
-
-	errorHandler ErrorHandler
+	startOnce    sync.Once
+	stopOnce     sync.Once
 
 	denylist           Denylist
 	denylistFailOpened metric.Int64Counter
@@ -39,13 +40,12 @@ func New(cfg Config, opts ...Option) *Verifier {
 	}
 
 	v := &Verifier{
-		issuer:       cfg.Issuer,
-		skew:         s.clockSkew,
-		log:          s.log,
-		tracer:       s.tracer,
-		stop:         make(chan struct{}),
-		errorHandler: s.errorHandler,
-		denylist:     s.denylist,
+		issuer:   cfg.Issuer,
+		skew:     s.clockSkew,
+		log:      s.log,
+		tracer:   s.tracer,
+		stop:     make(chan struct{}),
+		denylist: s.denylist,
 	}
 
 	if s.denylist != nil {
@@ -172,31 +172,60 @@ func (v *Verifier) Bootstrap(ctx context.Context) error {
 }
 
 func (v *Verifier) Start(ctx context.Context) {
-	t := time.NewTicker(v.refreshEvery)
-	go func() {
-		defer t.Stop()
-		for {
-			select {
-			case <-t.C:
-				spanCtx, span := v.tracer.Start(ctx, "authkit.ScheduledRefresh")
-				if err := v.cache.refresh(spanCtx); err != nil {
-					span.RecordError(err)
-					span.SetStatus(codes.Error, "scheduled refresh failed")
-					v.log.WarnContext(ctx, "authkit: scheduled refresh failed", "err", err)
-				} else {
-					span.SetAttributes(attribute.Int("authkit.keys_loaded", v.cache.len()))
+	v.startOnce.Do(func() {
+		t := time.NewTicker(v.refreshEvery)
+
+		go func() {
+			defer t.Stop()
+
+			for {
+				select {
+				case <-t.C:
+					spanCtx, span := v.tracer.Start(
+						ctx,
+						"authkit.ScheduledRefresh",
+					)
+
+					if err := v.cache.refresh(spanCtx); err != nil {
+						span.RecordError(err)
+						span.SetStatus(
+							codes.Error,
+							"scheduled refresh failed",
+						)
+
+						v.log.WarnContext(
+							ctx,
+							"authkit: scheduled refresh failed",
+							"err",
+							err,
+						)
+					} else {
+						span.SetAttributes(
+							attribute.Int(
+								"authkit.keys_loaded",
+								v.cache.len(),
+							),
+						)
+					}
+
+					span.End()
+
+				case <-v.stop:
+					return
+
+				case <-ctx.Done():
+					return
 				}
-				span.End()
-			case <-v.stop:
-				return
-			case <-ctx.Done():
-				return
 			}
-		}
-	}()
+		}()
+	})
 }
 
-func (v *Verifier) Stop() { close(v.stop) }
+func (v *Verifier) Stop() {
+	v.stopOnce.Do(func() {
+		close(v.stop)
+	})
+}
 
 func mapJWTError(err error) error {
 	switch {

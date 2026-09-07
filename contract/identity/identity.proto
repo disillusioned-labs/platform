@@ -35,7 +35,12 @@ message GetMemberRoleResponse {
 
 // GetUsersInfo
 message GetUsersInfoRequest {
-  repeated string user_ids = 1;  // batch UUID users
+  repeated UserOrgPair users = 1;
+}
+
+message UserOrgPair {
+  string user_id = 1;
+  string organization_id = 2;
 }
 
 message GetUsersInfoResponse {
