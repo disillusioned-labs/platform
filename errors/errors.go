@@ -24,9 +24,24 @@ type Error struct {
 	Status int
 	// Message is the client-safe text; it must never carry internal detail.
 	Message string
+	// Details carries optional structured context the client acts on (e.g.
+	// the rules blocking a member removal, under "rules"). Package-level
+	// sentinels are shared pointers, so details are attached via WithDetails,
+	// which returns a copy - never by mutating a sentinel.
+	Details any
 }
 
 func (e *Error) Error() string { return e.Message }
+
+// WithDetails returns a copy of e carrying details. The shared sentinel the
+// method is called on is never mutated, so concurrent requests stay safe:
+//
+//	return ErrApproverStillAssigned.WithDetails(map[string]any{"rules": rules})
+func (e *Error) WithDetails(details any) *Error {
+	c := *e
+	c.Details = details
+	return &c
+}
 
 // NewError builds a domain error for a resource-specific failure. Declare the
 // result as a package-level var so callers can compare it with errors.Is:

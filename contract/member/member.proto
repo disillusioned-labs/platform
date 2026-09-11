@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package identity.member.v1;
+
+option go_package = "github.com/disillusioned-labs/platform/contract/member;memberpb";
+
+// MemberService is served by expense and called by identity (REVERSE
+// direction of IdentityService): approval rules live in the expense
+// database, so only expense can answer "is this member still an active
+// approver?". Identity calls CheckApproverAssignments before committing a
+// member removal and ReassignApproverRules when the admin picks a
+// replacement ("keluarkan + alihkan ke ___").
+service MemberService {
+  rpc CheckApproverAssignments(CheckApproverAssignmentsRequest) returns (CheckApproverAssignmentsResponse);
+  rpc ReassignApproverRules(ReassignApproverRulesRequest) returns (ReassignApproverRulesResponse);
+}
+
+message CheckApproverAssignmentsRequest {
+  string organization_id = 1;
+  string user_id = 2;
+}
+
+message CheckApproverAssignmentsResponse {
+  bool has_active_rules = 1;  // true = member is still an approver on live rules
+  repeated ApprovalRule rules = 2;
+}
+
+message ApprovalRule {
+  string id = 1;  // UUID of the approval rule
+  string project_id = 2;  // UUID of the project; empty = organization default rule
+  int32 step = 3;
+}
+
+message ReassignApproverRulesRequest {
+  string organization_id = 1;
+  string from_user_id = 2;  // member being removed
+  string to_user_id = 3;  // replacement approver chosen by the admin
+  string actor_id = 4;  // admin who made the decision (for the audit event)
+}
+
+message ReassignApproverRulesResponse {
+  int64 reassigned = 1;  // number of rules moved
+}
