@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.12
 // 	protoc        v7.36.1
-// source: member.proto
+// source: expense.proto
 
 package memberpb
 
@@ -31,7 +31,7 @@ type CheckApproverAssignmentsRequest struct {
 
 func (x *CheckApproverAssignmentsRequest) Reset() {
 	*x = CheckApproverAssignmentsRequest{}
-	mi := &file_member_proto_msgTypes[0]
+	mi := &file_expense_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -43,7 +43,7 @@ func (x *CheckApproverAssignmentsRequest) String() string {
 func (*CheckApproverAssignmentsRequest) ProtoMessage() {}
 
 func (x *CheckApproverAssignmentsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_member_proto_msgTypes[0]
+	mi := &file_expense_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -56,7 +56,7 @@ func (x *CheckApproverAssignmentsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckApproverAssignmentsRequest.ProtoReflect.Descriptor instead.
 func (*CheckApproverAssignmentsRequest) Descriptor() ([]byte, []int) {
-	return file_member_proto_rawDescGZIP(), []int{0}
+	return file_expense_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *CheckApproverAssignmentsRequest) GetOrganizationId() string {
@@ -83,7 +83,7 @@ type CheckApproverAssignmentsResponse struct {
 
 func (x *CheckApproverAssignmentsResponse) Reset() {
 	*x = CheckApproverAssignmentsResponse{}
-	mi := &file_member_proto_msgTypes[1]
+	mi := &file_expense_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -95,7 +95,7 @@ func (x *CheckApproverAssignmentsResponse) String() string {
 func (*CheckApproverAssignmentsResponse) ProtoMessage() {}
 
 func (x *CheckApproverAssignmentsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_member_proto_msgTypes[1]
+	mi := &file_expense_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -108,7 +108,7 @@ func (x *CheckApproverAssignmentsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckApproverAssignmentsResponse.ProtoReflect.Descriptor instead.
 func (*CheckApproverAssignmentsResponse) Descriptor() ([]byte, []int) {
-	return file_member_proto_rawDescGZIP(), []int{1}
+	return file_expense_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CheckApproverAssignmentsResponse) GetHasActiveRules() bool {
@@ -136,7 +136,7 @@ type ApprovalRule struct {
 
 func (x *ApprovalRule) Reset() {
 	*x = ApprovalRule{}
-	mi := &file_member_proto_msgTypes[2]
+	mi := &file_expense_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -148,7 +148,7 @@ func (x *ApprovalRule) String() string {
 func (*ApprovalRule) ProtoMessage() {}
 
 func (x *ApprovalRule) ProtoReflect() protoreflect.Message {
-	mi := &file_member_proto_msgTypes[2]
+	mi := &file_expense_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -161,7 +161,7 @@ func (x *ApprovalRule) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApprovalRule.ProtoReflect.Descriptor instead.
 func (*ApprovalRule) Descriptor() ([]byte, []int) {
-	return file_member_proto_rawDescGZIP(), []int{2}
+	return file_expense_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ApprovalRule) GetId() string {
@@ -197,7 +197,7 @@ type ReassignApproverRulesRequest struct {
 
 func (x *ReassignApproverRulesRequest) Reset() {
 	*x = ReassignApproverRulesRequest{}
-	mi := &file_member_proto_msgTypes[3]
+	mi := &file_expense_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -209,7 +209,7 @@ func (x *ReassignApproverRulesRequest) String() string {
 func (*ReassignApproverRulesRequest) ProtoMessage() {}
 
 func (x *ReassignApproverRulesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_member_proto_msgTypes[3]
+	mi := &file_expense_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -222,7 +222,7 @@ func (x *ReassignApproverRulesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReassignApproverRulesRequest.ProtoReflect.Descriptor instead.
 func (*ReassignApproverRulesRequest) Descriptor() ([]byte, []int) {
-	return file_member_proto_rawDescGZIP(), []int{3}
+	return file_expense_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ReassignApproverRulesRequest) GetOrganizationId() string {
@@ -262,7 +262,7 @@ type ReassignApproverRulesResponse struct {
 
 func (x *ReassignApproverRulesResponse) Reset() {
 	*x = ReassignApproverRulesResponse{}
-	mi := &file_member_proto_msgTypes[4]
+	mi := &file_expense_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -274,7 +274,7 @@ func (x *ReassignApproverRulesResponse) String() string {
 func (*ReassignApproverRulesResponse) ProtoMessage() {}
 
 func (x *ReassignApproverRulesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_member_proto_msgTypes[4]
+	mi := &file_expense_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -287,7 +287,7 @@ func (x *ReassignApproverRulesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReassignApproverRulesResponse.ProtoReflect.Descriptor instead.
 func (*ReassignApproverRulesResponse) Descriptor() ([]byte, []int) {
-	return file_member_proto_rawDescGZIP(), []int{4}
+	return file_expense_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ReassignApproverRulesResponse) GetReassigned() int64 {
@@ -297,11 +297,11 @@ func (x *ReassignApproverRulesResponse) GetReassigned() int64 {
 	return 0
 }
 
-var File_member_proto protoreflect.FileDescriptor
+var File_expense_proto protoreflect.FileDescriptor
 
-const file_member_proto_rawDesc = "" +
+const file_expense_proto_rawDesc = "" +
 	"\n" +
-	"\fmember.proto\x12\x12identity.member.v1\"c\n" +
+	"\rexpense.proto\x12\x12identity.member.v1\"c\n" +
 	"\x1fCheckApproverAssignmentsRequest\x12'\n" +
 	"\x0forganization_id\x18\x01 \x01(\tR\x0eorganizationId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\"\x84\x01\n" +
@@ -329,26 +329,26 @@ const file_member_proto_rawDesc = "" +
 	"\x15ReassignApproverRules\x120.identity.member.v1.ReassignApproverRulesRequest\x1a1.identity.member.v1.ReassignApproverRulesResponseBAZ?github.com/disillusioned-labs/platform/contract/member;memberpbb\x06proto3"
 
 var (
-	file_member_proto_rawDescOnce sync.Once
-	file_member_proto_rawDescData []byte
+	file_expense_proto_rawDescOnce sync.Once
+	file_expense_proto_rawDescData []byte
 )
 
-func file_member_proto_rawDescGZIP() []byte {
-	file_member_proto_rawDescOnce.Do(func() {
-		file_member_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_member_proto_rawDesc), len(file_member_proto_rawDesc)))
+func file_expense_proto_rawDescGZIP() []byte {
+	file_expense_proto_rawDescOnce.Do(func() {
+		file_expense_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_expense_proto_rawDesc), len(file_expense_proto_rawDesc)))
 	})
-	return file_member_proto_rawDescData
+	return file_expense_proto_rawDescData
 }
 
-var file_member_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
-var file_member_proto_goTypes = []any{
+var file_expense_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_expense_proto_goTypes = []any{
 	(*CheckApproverAssignmentsRequest)(nil),  // 0: identity.member.v1.CheckApproverAssignmentsRequest
 	(*CheckApproverAssignmentsResponse)(nil), // 1: identity.member.v1.CheckApproverAssignmentsResponse
 	(*ApprovalRule)(nil),                     // 2: identity.member.v1.ApprovalRule
 	(*ReassignApproverRulesRequest)(nil),     // 3: identity.member.v1.ReassignApproverRulesRequest
 	(*ReassignApproverRulesResponse)(nil),    // 4: identity.member.v1.ReassignApproverRulesResponse
 }
-var file_member_proto_depIdxs = []int32{
+var file_expense_proto_depIdxs = []int32{
 	2, // 0: identity.member.v1.CheckApproverAssignmentsResponse.rules:type_name -> identity.member.v1.ApprovalRule
 	0, // 1: identity.member.v1.MemberService.CheckApproverAssignments:input_type -> identity.member.v1.CheckApproverAssignmentsRequest
 	3, // 2: identity.member.v1.MemberService.ReassignApproverRules:input_type -> identity.member.v1.ReassignApproverRulesRequest
@@ -361,26 +361,26 @@ var file_member_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_member_proto_init() }
-func file_member_proto_init() {
-	if File_member_proto != nil {
+func init() { file_expense_proto_init() }
+func file_expense_proto_init() {
+	if File_expense_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_member_proto_rawDesc), len(file_member_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_expense_proto_rawDesc), len(file_expense_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_member_proto_goTypes,
-		DependencyIndexes: file_member_proto_depIdxs,
-		MessageInfos:      file_member_proto_msgTypes,
+		GoTypes:           file_expense_proto_goTypes,
+		DependencyIndexes: file_expense_proto_depIdxs,
+		MessageInfos:      file_expense_proto_msgTypes,
 	}.Build()
-	File_member_proto = out.File
-	file_member_proto_goTypes = nil
-	file_member_proto_depIdxs = nil
+	File_expense_proto = out.File
+	file_expense_proto_goTypes = nil
+	file_expense_proto_depIdxs = nil
 }
