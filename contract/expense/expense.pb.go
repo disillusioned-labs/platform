@@ -4,7 +4,7 @@
 // 	protoc        v7.36.1
 // source: expense.proto
 
-package memberpb
+package expensepb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -301,13 +301,14 @@ var File_expense_proto protoreflect.FileDescriptor
 
 const file_expense_proto_rawDesc = "" +
 	"\n" +
-	"\rexpense.proto\x12\x12identity.member.v1\"c\n" +
+	"\rexpense.proto\x12\n" +
+	"expense.v1\"c\n" +
 	"\x1fCheckApproverAssignmentsRequest\x12'\n" +
 	"\x0forganization_id\x18\x01 \x01(\tR\x0eorganizationId\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\"\x84\x01\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\"|\n" +
 	" CheckApproverAssignmentsResponse\x12(\n" +
-	"\x10has_active_rules\x18\x01 \x01(\bR\x0ehasActiveRules\x126\n" +
-	"\x05rules\x18\x02 \x03(\v2 .identity.member.v1.ApprovalRuleR\x05rules\"Q\n" +
+	"\x10has_active_rules\x18\x01 \x01(\bR\x0ehasActiveRules\x12.\n" +
+	"\x05rules\x18\x02 \x03(\v2\x18.expense.v1.ApprovalRuleR\x05rules\"Q\n" +
 	"\fApprovalRule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
@@ -323,10 +324,10 @@ const file_expense_proto_rawDesc = "" +
 	"\x1dReassignApproverRulesResponse\x12\x1e\n" +
 	"\n" +
 	"reassigned\x18\x01 \x01(\x03R\n" +
-	"reassigned2\x95\x02\n" +
-	"\rMemberService\x12\x85\x01\n" +
-	"\x18CheckApproverAssignments\x123.identity.member.v1.CheckApproverAssignmentsRequest\x1a4.identity.member.v1.CheckApproverAssignmentsResponse\x12|\n" +
-	"\x15ReassignApproverRules\x120.identity.member.v1.ReassignApproverRulesRequest\x1a1.identity.member.v1.ReassignApproverRulesResponseBAZ?github.com/disillusioned-labs/platform/contract/member;memberpbb\x06proto3"
+	"reassigned2\xf5\x01\n" +
+	"\x0eExpenseService\x12u\n" +
+	"\x18CheckApproverAssignments\x12+.expense.v1.CheckApproverAssignmentsRequest\x1a,.expense.v1.CheckApproverAssignmentsResponse\x12l\n" +
+	"\x15ReassignApproverRules\x12(.expense.v1.ReassignApproverRulesRequest\x1a).expense.v1.ReassignApproverRulesResponseBCZAgithub.com/disillusioned-labs/platform/contract/expense;expensepbb\x06proto3"
 
 var (
 	file_expense_proto_rawDescOnce sync.Once
@@ -342,18 +343,18 @@ func file_expense_proto_rawDescGZIP() []byte {
 
 var file_expense_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_expense_proto_goTypes = []any{
-	(*CheckApproverAssignmentsRequest)(nil),  // 0: identity.member.v1.CheckApproverAssignmentsRequest
-	(*CheckApproverAssignmentsResponse)(nil), // 1: identity.member.v1.CheckApproverAssignmentsResponse
-	(*ApprovalRule)(nil),                     // 2: identity.member.v1.ApprovalRule
-	(*ReassignApproverRulesRequest)(nil),     // 3: identity.member.v1.ReassignApproverRulesRequest
-	(*ReassignApproverRulesResponse)(nil),    // 4: identity.member.v1.ReassignApproverRulesResponse
+	(*CheckApproverAssignmentsRequest)(nil),  // 0: expense.v1.CheckApproverAssignmentsRequest
+	(*CheckApproverAssignmentsResponse)(nil), // 1: expense.v1.CheckApproverAssignmentsResponse
+	(*ApprovalRule)(nil),                     // 2: expense.v1.ApprovalRule
+	(*ReassignApproverRulesRequest)(nil),     // 3: expense.v1.ReassignApproverRulesRequest
+	(*ReassignApproverRulesResponse)(nil),    // 4: expense.v1.ReassignApproverRulesResponse
 }
 var file_expense_proto_depIdxs = []int32{
-	2, // 0: identity.member.v1.CheckApproverAssignmentsResponse.rules:type_name -> identity.member.v1.ApprovalRule
-	0, // 1: identity.member.v1.MemberService.CheckApproverAssignments:input_type -> identity.member.v1.CheckApproverAssignmentsRequest
-	3, // 2: identity.member.v1.MemberService.ReassignApproverRules:input_type -> identity.member.v1.ReassignApproverRulesRequest
-	1, // 3: identity.member.v1.MemberService.CheckApproverAssignments:output_type -> identity.member.v1.CheckApproverAssignmentsResponse
-	4, // 4: identity.member.v1.MemberService.ReassignApproverRules:output_type -> identity.member.v1.ReassignApproverRulesResponse
+	2, // 0: expense.v1.CheckApproverAssignmentsResponse.rules:type_name -> expense.v1.ApprovalRule
+	0, // 1: expense.v1.ExpenseService.CheckApproverAssignments:input_type -> expense.v1.CheckApproverAssignmentsRequest
+	3, // 2: expense.v1.ExpenseService.ReassignApproverRules:input_type -> expense.v1.ReassignApproverRulesRequest
+	1, // 3: expense.v1.ExpenseService.CheckApproverAssignments:output_type -> expense.v1.CheckApproverAssignmentsResponse
+	4, // 4: expense.v1.ExpenseService.ReassignApproverRules:output_type -> expense.v1.ReassignApproverRulesResponse
 	3, // [3:5] is the sub-list for method output_type
 	1, // [1:3] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

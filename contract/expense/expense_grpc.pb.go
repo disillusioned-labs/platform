@@ -4,7 +4,7 @@
 // - protoc             v7.36.1
 // source: expense.proto
 
-package memberpb
+package expensepb
 
 import (
 	context "context"
@@ -19,153 +19,153 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	MemberService_CheckApproverAssignments_FullMethodName = "/identity.member.v1.MemberService/CheckApproverAssignments"
-	MemberService_ReassignApproverRules_FullMethodName    = "/identity.member.v1.MemberService/ReassignApproverRules"
+	ExpenseService_CheckApproverAssignments_FullMethodName = "/expense.v1.ExpenseService/CheckApproverAssignments"
+	ExpenseService_ReassignApproverRules_FullMethodName    = "/expense.v1.ExpenseService/ReassignApproverRules"
 )
 
-// MemberServiceClient is the client API for MemberService service.
+// ExpenseServiceClient is the client API for ExpenseService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// MemberService is served by expense and called by identity (REVERSE
+// ExpenseService is served by expense and called by identity (REVERSE
 // direction of IdentityService): approval rules live in the expense
 // database, so only expense can answer "is this member still an active
 // approver?". Identity calls CheckApproverAssignments before committing a
 // member removal and ReassignApproverRules when the admin picks a
 // replacement ("keluarkan + alihkan ke ___").
-type MemberServiceClient interface {
+type ExpenseServiceClient interface {
 	CheckApproverAssignments(ctx context.Context, in *CheckApproverAssignmentsRequest, opts ...grpc.CallOption) (*CheckApproverAssignmentsResponse, error)
 	ReassignApproverRules(ctx context.Context, in *ReassignApproverRulesRequest, opts ...grpc.CallOption) (*ReassignApproverRulesResponse, error)
 }
 
-type memberServiceClient struct {
+type expenseServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewMemberServiceClient(cc grpc.ClientConnInterface) MemberServiceClient {
-	return &memberServiceClient{cc}
+func NewExpenseServiceClient(cc grpc.ClientConnInterface) ExpenseServiceClient {
+	return &expenseServiceClient{cc}
 }
 
-func (c *memberServiceClient) CheckApproverAssignments(ctx context.Context, in *CheckApproverAssignmentsRequest, opts ...grpc.CallOption) (*CheckApproverAssignmentsResponse, error) {
+func (c *expenseServiceClient) CheckApproverAssignments(ctx context.Context, in *CheckApproverAssignmentsRequest, opts ...grpc.CallOption) (*CheckApproverAssignmentsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CheckApproverAssignmentsResponse)
-	err := c.cc.Invoke(ctx, MemberService_CheckApproverAssignments_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ExpenseService_CheckApproverAssignments_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *memberServiceClient) ReassignApproverRules(ctx context.Context, in *ReassignApproverRulesRequest, opts ...grpc.CallOption) (*ReassignApproverRulesResponse, error) {
+func (c *expenseServiceClient) ReassignApproverRules(ctx context.Context, in *ReassignApproverRulesRequest, opts ...grpc.CallOption) (*ReassignApproverRulesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ReassignApproverRulesResponse)
-	err := c.cc.Invoke(ctx, MemberService_ReassignApproverRules_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ExpenseService_ReassignApproverRules_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// MemberServiceServer is the server API for MemberService service.
-// All implementations must embed UnimplementedMemberServiceServer
+// ExpenseServiceServer is the server API for ExpenseService service.
+// All implementations must embed UnimplementedExpenseServiceServer
 // for forward compatibility.
 //
-// MemberService is served by expense and called by identity (REVERSE
+// ExpenseService is served by expense and called by identity (REVERSE
 // direction of IdentityService): approval rules live in the expense
 // database, so only expense can answer "is this member still an active
 // approver?". Identity calls CheckApproverAssignments before committing a
 // member removal and ReassignApproverRules when the admin picks a
 // replacement ("keluarkan + alihkan ke ___").
-type MemberServiceServer interface {
+type ExpenseServiceServer interface {
 	CheckApproverAssignments(context.Context, *CheckApproverAssignmentsRequest) (*CheckApproverAssignmentsResponse, error)
 	ReassignApproverRules(context.Context, *ReassignApproverRulesRequest) (*ReassignApproverRulesResponse, error)
-	mustEmbedUnimplementedMemberServiceServer()
+	mustEmbedUnimplementedExpenseServiceServer()
 }
 
-// UnimplementedMemberServiceServer must be embedded to have
+// UnimplementedExpenseServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedMemberServiceServer struct{}
+type UnimplementedExpenseServiceServer struct{}
 
-func (UnimplementedMemberServiceServer) CheckApproverAssignments(context.Context, *CheckApproverAssignmentsRequest) (*CheckApproverAssignmentsResponse, error) {
+func (UnimplementedExpenseServiceServer) CheckApproverAssignments(context.Context, *CheckApproverAssignmentsRequest) (*CheckApproverAssignmentsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckApproverAssignments not implemented")
 }
-func (UnimplementedMemberServiceServer) ReassignApproverRules(context.Context, *ReassignApproverRulesRequest) (*ReassignApproverRulesResponse, error) {
+func (UnimplementedExpenseServiceServer) ReassignApproverRules(context.Context, *ReassignApproverRulesRequest) (*ReassignApproverRulesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ReassignApproverRules not implemented")
 }
-func (UnimplementedMemberServiceServer) mustEmbedUnimplementedMemberServiceServer() {}
-func (UnimplementedMemberServiceServer) testEmbeddedByValue()                       {}
+func (UnimplementedExpenseServiceServer) mustEmbedUnimplementedExpenseServiceServer() {}
+func (UnimplementedExpenseServiceServer) testEmbeddedByValue()                        {}
 
-// UnsafeMemberServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to MemberServiceServer will
+// UnsafeExpenseServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ExpenseServiceServer will
 // result in compilation errors.
-type UnsafeMemberServiceServer interface {
-	mustEmbedUnimplementedMemberServiceServer()
+type UnsafeExpenseServiceServer interface {
+	mustEmbedUnimplementedExpenseServiceServer()
 }
 
-func RegisterMemberServiceServer(s grpc.ServiceRegistrar, srv MemberServiceServer) {
-	// If the following call panics, it indicates UnimplementedMemberServiceServer was
+func RegisterExpenseServiceServer(s grpc.ServiceRegistrar, srv ExpenseServiceServer) {
+	// If the following call panics, it indicates UnimplementedExpenseServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&MemberService_ServiceDesc, srv)
+	s.RegisterService(&ExpenseService_ServiceDesc, srv)
 }
 
-func _MemberService_CheckApproverAssignments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ExpenseService_CheckApproverAssignments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CheckApproverAssignmentsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MemberServiceServer).CheckApproverAssignments(ctx, in)
+		return srv.(ExpenseServiceServer).CheckApproverAssignments(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MemberService_CheckApproverAssignments_FullMethodName,
+		FullMethod: ExpenseService_CheckApproverAssignments_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MemberServiceServer).CheckApproverAssignments(ctx, req.(*CheckApproverAssignmentsRequest))
+		return srv.(ExpenseServiceServer).CheckApproverAssignments(ctx, req.(*CheckApproverAssignmentsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MemberService_ReassignApproverRules_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ExpenseService_ReassignApproverRules_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReassignApproverRulesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MemberServiceServer).ReassignApproverRules(ctx, in)
+		return srv.(ExpenseServiceServer).ReassignApproverRules(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MemberService_ReassignApproverRules_FullMethodName,
+		FullMethod: ExpenseService_ReassignApproverRules_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MemberServiceServer).ReassignApproverRules(ctx, req.(*ReassignApproverRulesRequest))
+		return srv.(ExpenseServiceServer).ReassignApproverRules(ctx, req.(*ReassignApproverRulesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// MemberService_ServiceDesc is the grpc.ServiceDesc for MemberService service.
+// ExpenseService_ServiceDesc is the grpc.ServiceDesc for ExpenseService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var MemberService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "identity.member.v1.MemberService",
-	HandlerType: (*MemberServiceServer)(nil),
+var ExpenseService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "expense.v1.ExpenseService",
+	HandlerType: (*ExpenseServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CheckApproverAssignments",
-			Handler:    _MemberService_CheckApproverAssignments_Handler,
+			Handler:    _ExpenseService_CheckApproverAssignments_Handler,
 		},
 		{
 			MethodName: "ReassignApproverRules",
-			Handler:    _MemberService_ReassignApproverRules_Handler,
+			Handler:    _ExpenseService_ReassignApproverRules_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
