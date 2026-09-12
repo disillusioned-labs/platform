@@ -28,7 +28,6 @@ type RecordHeader struct {
 	Value []byte
 }
 
-// NewRecordHeader creates an application-facing Kafka header.
 func NewRecordHeader(key, value string) RecordHeader {
 	return RecordHeader{
 		Key:   key,

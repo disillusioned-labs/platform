@@ -43,7 +43,6 @@ type DLQPublisher struct {
 	log      *slog.Logger
 }
 
-// NewDLQPublisher creates a DLQ publisher using the shared Kafka producer.
 func NewDLQPublisher(
 	producer Producer,
 	topic string,

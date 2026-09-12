@@ -12,8 +12,6 @@ type Consumer struct {
 	client *kgo.Client
 }
 
-// NewConsumer creates a consumer using an existing Kafka client.
-//
 // Consumer-group configuration belongs to the Kafka client configuration.
 func NewConsumer(client *kgo.Client) *Consumer {
 	return &Consumer{

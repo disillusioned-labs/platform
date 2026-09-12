@@ -58,7 +58,6 @@ var queryExecModes = map[string]pgx.QueryExecMode{
 	"simple_protocol": pgx.QueryExecModeSimpleProtocol,
 }
 
-// NewPool creates a pgx connection pool and verifies connectivity.
 func NewPool(ctx context.Context, dsn string, opts ...Option) (*pgxpool.Pool, error) {
 	poolCfg, err := pgxpool.ParseConfig(dsn)
 	if err != nil {

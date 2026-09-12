@@ -18,7 +18,6 @@ type ClientProducer struct {
 	client *kgo.Client
 }
 
-// NewProducer creates a producer backed by an existing Kafka client.
 //
 // The Kafka client is shared so producers and consumers can use the same
 // connection pool and metadata/cache.
