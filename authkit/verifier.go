@@ -69,7 +69,7 @@ func New(cfg Config, opts ...Option) *Verifier {
 		}
 	}
 
-	v.cache = newKeyCache(fetch, limiter)
+	v.cache = newKeyCache(fetch, limiter, s.store, s.log)
 
 	v.refreshEvery = s.refreshEvery
 	return v
@@ -161,10 +161,26 @@ func (v *Verifier) Bootstrap(ctx context.Context) error {
 	defer span.End()
 
 	if err := v.cache.refresh(ctx); err != nil {
-		span.RecordError(err)
-		span.SetStatus(codes.Error, "jwks fetch failed at boot")
-		v.log.WarnContext(ctx, "authkit: jwks fetch failed at boot", "err", err)
-		return err
+		// Identity unreachable at boot: fall back to the last persisted JWKS
+		// document, so a restarting consumer keeps verifying tokens. Stale
+		// keys still work (they were valid when fetched) - an unknown kid
+		// later triggers the usual throttled refresh.
+		if loadErr := v.cache.loadFromStore(ctx); loadErr != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, "jwks fetch failed at boot")
+			v.log.WarnContext(ctx, "authkit: jwks fetch failed at boot", "err", err)
+			return err
+		}
+
+		v.log.WarnContext(
+			ctx,
+			"authkit: jwks fetch failed at boot, serving persisted keys",
+			"err", err,
+			"keys", v.cache.len(),
+		)
+		span.SetAttributes(attribute.Int("authkit.keys_loaded", v.cache.len()))
+
+		return nil
 	}
 	span.SetAttributes(attribute.Int("authkit.keys_loaded", v.cache.len()))
 	v.log.InfoContext(ctx, "authkit: jwks loaded", "keys", v.cache.len())

@@ -29,6 +29,7 @@ type settings struct {
 	unknownKidBurst int
 	clockSkew       time.Duration
 	keySource       KeySource
+	store           Store
 	denylist        Denylist
 	errorHandler    ErrorHandler
 	log             *slog.Logger
@@ -75,6 +76,15 @@ func WithClockSkew(d time.Duration) Option {
 func WithKeySource(source KeySource) Option {
 	return func(s *settings) {
 		s.keySource = source
+	}
+}
+
+// WithStore persists the raw JWKS between restarts. A nil store (the
+// default) keeps the memory-only behaviour: boot fails when identity is
+// unreachable and the JWKS was never fetched.
+func WithStore(store Store) Option {
+	return func(s *settings) {
+		s.store = store
 	}
 }
 
