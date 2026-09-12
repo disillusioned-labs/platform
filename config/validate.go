@@ -101,15 +101,13 @@ func ValidateGRPC(c *GRPCConfig) error {
 	return errors.Join(errs...)
 }
 
-// ValidateGRPCClient validates outbound gRPC client configuration.
+// ValidateGRPCClient validates outbound gRPC client configuration. Targets
+// are validated by the consuming service - they are per-dependency keys, not
+// part of the shared client settings.
 func ValidateGRPCClient(c *GRPCClientConfig) error {
 	var errs []error
 	fail := func(format string, args ...any) {
 		errs = append(errs, fmt.Errorf(format, args...))
-	}
-
-	if strings.TrimSpace(c.Target) == "" {
-		fail("grpc_client.target must not be empty")
 	}
 
 	if c.Timeout <= 0 {

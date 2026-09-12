@@ -71,14 +71,16 @@ type GRPCConfig struct {
 
 // GRPCClientConfig holds outbound gRPC client transport settings.
 //
+// Endpoint addresses are deliberately absent: a service dials more than one
+// peer, so each dependency owns its own target key (identity.grpc_target,
+// expense.grpc_target, ocr.gateway_target). That also keeps the .env layering
+// honest, which maps EnvKey over config keys and would silently ignore a
+// renamed variable otherwise.
+//
 // Connection lifecycle, dialing, retries, interceptors, and transport
 // behavior are owned by platform/grpc. This config only contains
 // service-level knobs that operators may need to tune.
 type GRPCClientConfig struct {
-	// Target is the gRPC server target consumed by the configured resolver.
-	// It may use a resolver-specific target such as dns:///host:port.
-	Target string `mapstructure:"target"`
-
 	// Timeout is the default RPC timeout applied when the caller does not
 	// already provide a deadline.
 	Timeout time.Duration `mapstructure:"timeout"`
