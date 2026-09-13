@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.12
 // 	protoc        v7.36.1
-// source: identity.proto
+// source: identity/identity.proto
 
 package identitypb
 
@@ -32,7 +32,7 @@ type IsMemberActiveRequest struct {
 
 func (x *IsMemberActiveRequest) Reset() {
 	*x = IsMemberActiveRequest{}
-	mi := &file_identity_proto_msgTypes[0]
+	mi := &file_identity_identity_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +44,7 @@ func (x *IsMemberActiveRequest) String() string {
 func (*IsMemberActiveRequest) ProtoMessage() {}
 
 func (x *IsMemberActiveRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[0]
+	mi := &file_identity_identity_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *IsMemberActiveRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IsMemberActiveRequest.ProtoReflect.Descriptor instead.
 func (*IsMemberActiveRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{0}
+	return file_identity_identity_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *IsMemberActiveRequest) GetOrganizationId() string {
@@ -84,7 +84,7 @@ type IsMemberActiveResponse struct {
 
 func (x *IsMemberActiveResponse) Reset() {
 	*x = IsMemberActiveResponse{}
-	mi := &file_identity_proto_msgTypes[1]
+	mi := &file_identity_identity_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -96,7 +96,7 @@ func (x *IsMemberActiveResponse) String() string {
 func (*IsMemberActiveResponse) ProtoMessage() {}
 
 func (x *IsMemberActiveResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[1]
+	mi := &file_identity_identity_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -109,7 +109,7 @@ func (x *IsMemberActiveResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IsMemberActiveResponse.ProtoReflect.Descriptor instead.
 func (*IsMemberActiveResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{1}
+	return file_identity_identity_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *IsMemberActiveResponse) GetIsActive() bool {
@@ -137,7 +137,7 @@ type GetMemberRoleRequest struct {
 
 func (x *GetMemberRoleRequest) Reset() {
 	*x = GetMemberRoleRequest{}
-	mi := &file_identity_proto_msgTypes[2]
+	mi := &file_identity_identity_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -149,7 +149,7 @@ func (x *GetMemberRoleRequest) String() string {
 func (*GetMemberRoleRequest) ProtoMessage() {}
 
 func (x *GetMemberRoleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[2]
+	mi := &file_identity_identity_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -162,7 +162,7 @@ func (x *GetMemberRoleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMemberRoleRequest.ProtoReflect.Descriptor instead.
 func (*GetMemberRoleRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{2}
+	return file_identity_identity_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetMemberRoleRequest) GetOrganizationId() string {
@@ -188,7 +188,7 @@ type GetMemberRoleResponse struct {
 
 func (x *GetMemberRoleResponse) Reset() {
 	*x = GetMemberRoleResponse{}
-	mi := &file_identity_proto_msgTypes[3]
+	mi := &file_identity_identity_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -200,7 +200,7 @@ func (x *GetMemberRoleResponse) String() string {
 func (*GetMemberRoleResponse) ProtoMessage() {}
 
 func (x *GetMemberRoleResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[3]
+	mi := &file_identity_identity_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -213,7 +213,7 @@ func (x *GetMemberRoleResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMemberRoleResponse.ProtoReflect.Descriptor instead.
 func (*GetMemberRoleResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{3}
+	return file_identity_identity_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetMemberRoleResponse) GetRole() string {
@@ -233,7 +233,7 @@ type GetUsersInfoRequest struct {
 
 func (x *GetUsersInfoRequest) Reset() {
 	*x = GetUsersInfoRequest{}
-	mi := &file_identity_proto_msgTypes[4]
+	mi := &file_identity_identity_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -245,7 +245,7 @@ func (x *GetUsersInfoRequest) String() string {
 func (*GetUsersInfoRequest) ProtoMessage() {}
 
 func (x *GetUsersInfoRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[4]
+	mi := &file_identity_identity_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -258,7 +258,7 @@ func (x *GetUsersInfoRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUsersInfoRequest.ProtoReflect.Descriptor instead.
 func (*GetUsersInfoRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{4}
+	return file_identity_identity_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetUsersInfoRequest) GetUsers() []*UserOrgPair {
@@ -278,7 +278,7 @@ type UserOrgPair struct {
 
 func (x *UserOrgPair) Reset() {
 	*x = UserOrgPair{}
-	mi := &file_identity_proto_msgTypes[5]
+	mi := &file_identity_identity_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -290,7 +290,7 @@ func (x *UserOrgPair) String() string {
 func (*UserOrgPair) ProtoMessage() {}
 
 func (x *UserOrgPair) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[5]
+	mi := &file_identity_identity_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -303,7 +303,7 @@ func (x *UserOrgPair) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserOrgPair.ProtoReflect.Descriptor instead.
 func (*UserOrgPair) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{5}
+	return file_identity_identity_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UserOrgPair) GetUserId() string {
@@ -329,7 +329,7 @@ type GetUsersInfoResponse struct {
 
 func (x *GetUsersInfoResponse) Reset() {
 	*x = GetUsersInfoResponse{}
-	mi := &file_identity_proto_msgTypes[6]
+	mi := &file_identity_identity_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -341,7 +341,7 @@ func (x *GetUsersInfoResponse) String() string {
 func (*GetUsersInfoResponse) ProtoMessage() {}
 
 func (x *GetUsersInfoResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[6]
+	mi := &file_identity_identity_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -354,7 +354,7 @@ func (x *GetUsersInfoResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUsersInfoResponse.ProtoReflect.Descriptor instead.
 func (*GetUsersInfoResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{6}
+	return file_identity_identity_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetUsersInfoResponse) GetUsers() []*UserInfo {
@@ -377,7 +377,7 @@ type UserInfo struct {
 
 func (x *UserInfo) Reset() {
 	*x = UserInfo{}
-	mi := &file_identity_proto_msgTypes[7]
+	mi := &file_identity_identity_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -389,7 +389,7 @@ func (x *UserInfo) String() string {
 func (*UserInfo) ProtoMessage() {}
 
 func (x *UserInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[7]
+	mi := &file_identity_identity_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -402,7 +402,7 @@ func (x *UserInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserInfo.ProtoReflect.Descriptor instead.
 func (*UserInfo) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{7}
+	return file_identity_identity_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UserInfo) GetUserId() string {
@@ -450,7 +450,7 @@ type GetOrgStatusRequest struct {
 
 func (x *GetOrgStatusRequest) Reset() {
 	*x = GetOrgStatusRequest{}
-	mi := &file_identity_proto_msgTypes[8]
+	mi := &file_identity_identity_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -462,7 +462,7 @@ func (x *GetOrgStatusRequest) String() string {
 func (*GetOrgStatusRequest) ProtoMessage() {}
 
 func (x *GetOrgStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[8]
+	mi := &file_identity_identity_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -475,7 +475,7 @@ func (x *GetOrgStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrgStatusRequest.ProtoReflect.Descriptor instead.
 func (*GetOrgStatusRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{8}
+	return file_identity_identity_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetOrgStatusRequest) GetOrganizationId() string {
@@ -495,7 +495,7 @@ type GetOrgStatusResponse struct {
 
 func (x *GetOrgStatusResponse) Reset() {
 	*x = GetOrgStatusResponse{}
-	mi := &file_identity_proto_msgTypes[9]
+	mi := &file_identity_identity_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -507,7 +507,7 @@ func (x *GetOrgStatusResponse) String() string {
 func (*GetOrgStatusResponse) ProtoMessage() {}
 
 func (x *GetOrgStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[9]
+	mi := &file_identity_identity_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -520,7 +520,7 @@ func (x *GetOrgStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrgStatusResponse.ProtoReflect.Descriptor instead.
 func (*GetOrgStatusResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{9}
+	return file_identity_identity_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetOrgStatusResponse) GetIsFrozen() bool {
@@ -549,7 +549,7 @@ type IsServiceAccessAllowedRequest struct {
 
 func (x *IsServiceAccessAllowedRequest) Reset() {
 	*x = IsServiceAccessAllowedRequest{}
-	mi := &file_identity_proto_msgTypes[10]
+	mi := &file_identity_identity_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -561,7 +561,7 @@ func (x *IsServiceAccessAllowedRequest) String() string {
 func (*IsServiceAccessAllowedRequest) ProtoMessage() {}
 
 func (x *IsServiceAccessAllowedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[10]
+	mi := &file_identity_identity_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -574,7 +574,7 @@ func (x *IsServiceAccessAllowedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IsServiceAccessAllowedRequest.ProtoReflect.Descriptor instead.
 func (*IsServiceAccessAllowedRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{10}
+	return file_identity_identity_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *IsServiceAccessAllowedRequest) GetUserId() string {
@@ -607,7 +607,7 @@ type IsServiceAccessAllowedResponse struct {
 
 func (x *IsServiceAccessAllowedResponse) Reset() {
 	*x = IsServiceAccessAllowedResponse{}
-	mi := &file_identity_proto_msgTypes[11]
+	mi := &file_identity_identity_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -619,7 +619,7 @@ func (x *IsServiceAccessAllowedResponse) String() string {
 func (*IsServiceAccessAllowedResponse) ProtoMessage() {}
 
 func (x *IsServiceAccessAllowedResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[11]
+	mi := &file_identity_identity_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -632,7 +632,7 @@ func (x *IsServiceAccessAllowedResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IsServiceAccessAllowedResponse.ProtoReflect.Descriptor instead.
 func (*IsServiceAccessAllowedResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{11}
+	return file_identity_identity_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *IsServiceAccessAllowedResponse) GetAllowed() bool {
@@ -642,11 +642,100 @@ func (x *IsServiceAccessAllowedResponse) GetAllowed() bool {
 	return false
 }
 
-var File_identity_proto protoreflect.FileDescriptor
+// GetDeviceTokens
+type GetDeviceTokensRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
 
-const file_identity_proto_rawDesc = "" +
+func (x *GetDeviceTokensRequest) Reset() {
+	*x = GetDeviceTokensRequest{}
+	mi := &file_identity_identity_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDeviceTokensRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDeviceTokensRequest) ProtoMessage() {}
+
+func (x *GetDeviceTokensRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_identity_identity_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDeviceTokensRequest.ProtoReflect.Descriptor instead.
+func (*GetDeviceTokensRequest) Descriptor() ([]byte, []int) {
+	return file_identity_identity_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *GetDeviceTokensRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type GetDeviceTokensResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Tokens        []string               `protobuf:"bytes,1,rep,name=tokens,proto3" json:"tokens,omitempty"` // push tokens of the user's active (non-revoked) devices
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDeviceTokensResponse) Reset() {
+	*x = GetDeviceTokensResponse{}
+	mi := &file_identity_identity_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDeviceTokensResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDeviceTokensResponse) ProtoMessage() {}
+
+func (x *GetDeviceTokensResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_identity_identity_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDeviceTokensResponse.ProtoReflect.Descriptor instead.
+func (*GetDeviceTokensResponse) Descriptor() ([]byte, []int) {
+	return file_identity_identity_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GetDeviceTokensResponse) GetTokens() []string {
+	if x != nil {
+		return x.Tokens
+	}
+	return nil
+}
+
+var File_identity_identity_proto protoreflect.FileDescriptor
+
+const file_identity_identity_proto_rawDesc = "" +
 	"\n" +
-	"\x0eidentity.proto\x12\videntity.v1\"Y\n" +
+	"\x17identity/identity.proto\x12\videntity.v1\"Y\n" +
 	"\x15IsMemberActiveRequest\x12'\n" +
 	"\x0forganization_id\x18\x01 \x01(\tR\x0eorganizationId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\"I\n" +
@@ -682,28 +771,33 @@ const file_identity_proto_rawDesc = "" +
 	"\x0forganization_id\x18\x02 \x01(\tR\x0eorganizationId\x12!\n" +
 	"\fservice_name\x18\x03 \x01(\tR\vserviceName\":\n" +
 	"\x1eIsServiceAccessAllowedResponse\x12\x18\n" +
-	"\aallowed\x18\x01 \x01(\bR\aallowed2\xe1\x03\n" +
+	"\aallowed\x18\x01 \x01(\bR\aallowed\"1\n" +
+	"\x16GetDeviceTokensRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"1\n" +
+	"\x17GetDeviceTokensResponse\x12\x16\n" +
+	"\x06tokens\x18\x01 \x03(\tR\x06tokens2\xbf\x04\n" +
 	"\x0fIdentityService\x12Y\n" +
 	"\x0eIsMemberActive\x12\".identity.v1.IsMemberActiveRequest\x1a#.identity.v1.IsMemberActiveResponse\x12V\n" +
 	"\rGetMemberRole\x12!.identity.v1.GetMemberRoleRequest\x1a\".identity.v1.GetMemberRoleResponse\x12S\n" +
 	"\fGetUsersInfo\x12 .identity.v1.GetUsersInfoRequest\x1a!.identity.v1.GetUsersInfoResponse\x12S\n" +
 	"\fGetOrgStatus\x12 .identity.v1.GetOrgStatusRequest\x1a!.identity.v1.GetOrgStatusResponse\x12q\n" +
-	"\x16IsServiceAccessAllowed\x12*.identity.v1.IsServiceAccessAllowedRequest\x1a+.identity.v1.IsServiceAccessAllowedResponseBEZCgithub.com/disillusioned-labs/platform/contract/identity;identitypbb\x06proto3"
+	"\x16IsServiceAccessAllowed\x12*.identity.v1.IsServiceAccessAllowedRequest\x1a+.identity.v1.IsServiceAccessAllowedResponse\x12\\\n" +
+	"\x0fGetDeviceTokens\x12#.identity.v1.GetDeviceTokensRequest\x1a$.identity.v1.GetDeviceTokensResponseBEZCgithub.com/disillusioned-labs/platform/contract/identity;identitypbb\x06proto3"
 
 var (
-	file_identity_proto_rawDescOnce sync.Once
-	file_identity_proto_rawDescData []byte
+	file_identity_identity_proto_rawDescOnce sync.Once
+	file_identity_identity_proto_rawDescData []byte
 )
 
-func file_identity_proto_rawDescGZIP() []byte {
-	file_identity_proto_rawDescOnce.Do(func() {
-		file_identity_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_identity_proto_rawDesc), len(file_identity_proto_rawDesc)))
+func file_identity_identity_proto_rawDescGZIP() []byte {
+	file_identity_identity_proto_rawDescOnce.Do(func() {
+		file_identity_identity_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_identity_identity_proto_rawDesc), len(file_identity_identity_proto_rawDesc)))
 	})
-	return file_identity_proto_rawDescData
+	return file_identity_identity_proto_rawDescData
 }
 
-var file_identity_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
-var file_identity_proto_goTypes = []any{
+var file_identity_identity_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_identity_identity_proto_goTypes = []any{
 	(*IsMemberActiveRequest)(nil),          // 0: identity.v1.IsMemberActiveRequest
 	(*IsMemberActiveResponse)(nil),         // 1: identity.v1.IsMemberActiveResponse
 	(*GetMemberRoleRequest)(nil),           // 2: identity.v1.GetMemberRoleRequest
@@ -716,8 +810,10 @@ var file_identity_proto_goTypes = []any{
 	(*GetOrgStatusResponse)(nil),           // 9: identity.v1.GetOrgStatusResponse
 	(*IsServiceAccessAllowedRequest)(nil),  // 10: identity.v1.IsServiceAccessAllowedRequest
 	(*IsServiceAccessAllowedResponse)(nil), // 11: identity.v1.IsServiceAccessAllowedResponse
+	(*GetDeviceTokensRequest)(nil),         // 12: identity.v1.GetDeviceTokensRequest
+	(*GetDeviceTokensResponse)(nil),        // 13: identity.v1.GetDeviceTokensResponse
 }
-var file_identity_proto_depIdxs = []int32{
+var file_identity_identity_proto_depIdxs = []int32{
 	5,  // 0: identity.v1.GetUsersInfoRequest.users:type_name -> identity.v1.UserOrgPair
 	7,  // 1: identity.v1.GetUsersInfoResponse.users:type_name -> identity.v1.UserInfo
 	0,  // 2: identity.v1.IdentityService.IsMemberActive:input_type -> identity.v1.IsMemberActiveRequest
@@ -725,38 +821,40 @@ var file_identity_proto_depIdxs = []int32{
 	4,  // 4: identity.v1.IdentityService.GetUsersInfo:input_type -> identity.v1.GetUsersInfoRequest
 	8,  // 5: identity.v1.IdentityService.GetOrgStatus:input_type -> identity.v1.GetOrgStatusRequest
 	10, // 6: identity.v1.IdentityService.IsServiceAccessAllowed:input_type -> identity.v1.IsServiceAccessAllowedRequest
-	1,  // 7: identity.v1.IdentityService.IsMemberActive:output_type -> identity.v1.IsMemberActiveResponse
-	3,  // 8: identity.v1.IdentityService.GetMemberRole:output_type -> identity.v1.GetMemberRoleResponse
-	6,  // 9: identity.v1.IdentityService.GetUsersInfo:output_type -> identity.v1.GetUsersInfoResponse
-	9,  // 10: identity.v1.IdentityService.GetOrgStatus:output_type -> identity.v1.GetOrgStatusResponse
-	11, // 11: identity.v1.IdentityService.IsServiceAccessAllowed:output_type -> identity.v1.IsServiceAccessAllowedResponse
-	7,  // [7:12] is the sub-list for method output_type
-	2,  // [2:7] is the sub-list for method input_type
+	12, // 7: identity.v1.IdentityService.GetDeviceTokens:input_type -> identity.v1.GetDeviceTokensRequest
+	1,  // 8: identity.v1.IdentityService.IsMemberActive:output_type -> identity.v1.IsMemberActiveResponse
+	3,  // 9: identity.v1.IdentityService.GetMemberRole:output_type -> identity.v1.GetMemberRoleResponse
+	6,  // 10: identity.v1.IdentityService.GetUsersInfo:output_type -> identity.v1.GetUsersInfoResponse
+	9,  // 11: identity.v1.IdentityService.GetOrgStatus:output_type -> identity.v1.GetOrgStatusResponse
+	11, // 12: identity.v1.IdentityService.IsServiceAccessAllowed:output_type -> identity.v1.IsServiceAccessAllowedResponse
+	13, // 13: identity.v1.IdentityService.GetDeviceTokens:output_type -> identity.v1.GetDeviceTokensResponse
+	8,  // [8:14] is the sub-list for method output_type
+	2,  // [2:8] is the sub-list for method input_type
 	2,  // [2:2] is the sub-list for extension type_name
 	2,  // [2:2] is the sub-list for extension extendee
 	0,  // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_identity_proto_init() }
-func file_identity_proto_init() {
-	if File_identity_proto != nil {
+func init() { file_identity_identity_proto_init() }
+func file_identity_identity_proto_init() {
+	if File_identity_identity_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_identity_proto_rawDesc), len(file_identity_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_identity_identity_proto_rawDesc), len(file_identity_identity_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_identity_proto_goTypes,
-		DependencyIndexes: file_identity_proto_depIdxs,
-		MessageInfos:      file_identity_proto_msgTypes,
+		GoTypes:           file_identity_identity_proto_goTypes,
+		DependencyIndexes: file_identity_identity_proto_depIdxs,
+		MessageInfos:      file_identity_identity_proto_msgTypes,
 	}.Build()
-	File_identity_proto = out.File
-	file_identity_proto_goTypes = nil
-	file_identity_proto_depIdxs = nil
+	File_identity_identity_proto = out.File
+	file_identity_identity_proto_goTypes = nil
+	file_identity_identity_proto_depIdxs = nil
 }

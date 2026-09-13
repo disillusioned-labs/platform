@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.2
 // - protoc             v7.36.1
-// source: identity.proto
+// source: identity/identity.proto
 
 package identitypb
 
@@ -24,6 +24,7 @@ const (
 	IdentityService_GetUsersInfo_FullMethodName           = "/identity.v1.IdentityService/GetUsersInfo"
 	IdentityService_GetOrgStatus_FullMethodName           = "/identity.v1.IdentityService/GetOrgStatus"
 	IdentityService_IsServiceAccessAllowed_FullMethodName = "/identity.v1.IdentityService/IsServiceAccessAllowed"
+	IdentityService_GetDeviceTokens_FullMethodName        = "/identity.v1.IdentityService/GetDeviceTokens"
 )
 
 // IdentityServiceClient is the client API for IdentityService service.
@@ -35,6 +36,7 @@ type IdentityServiceClient interface {
 	GetUsersInfo(ctx context.Context, in *GetUsersInfoRequest, opts ...grpc.CallOption) (*GetUsersInfoResponse, error)
 	GetOrgStatus(ctx context.Context, in *GetOrgStatusRequest, opts ...grpc.CallOption) (*GetOrgStatusResponse, error)
 	IsServiceAccessAllowed(ctx context.Context, in *IsServiceAccessAllowedRequest, opts ...grpc.CallOption) (*IsServiceAccessAllowedResponse, error)
+	GetDeviceTokens(ctx context.Context, in *GetDeviceTokensRequest, opts ...grpc.CallOption) (*GetDeviceTokensResponse, error)
 }
 
 type identityServiceClient struct {
@@ -95,6 +97,16 @@ func (c *identityServiceClient) IsServiceAccessAllowed(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *identityServiceClient) GetDeviceTokens(ctx context.Context, in *GetDeviceTokensRequest, opts ...grpc.CallOption) (*GetDeviceTokensResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDeviceTokensResponse)
+	err := c.cc.Invoke(ctx, IdentityService_GetDeviceTokens_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // IdentityServiceServer is the server API for IdentityService service.
 // All implementations must embed UnimplementedIdentityServiceServer
 // for forward compatibility.
@@ -104,6 +116,7 @@ type IdentityServiceServer interface {
 	GetUsersInfo(context.Context, *GetUsersInfoRequest) (*GetUsersInfoResponse, error)
 	GetOrgStatus(context.Context, *GetOrgStatusRequest) (*GetOrgStatusResponse, error)
 	IsServiceAccessAllowed(context.Context, *IsServiceAccessAllowedRequest) (*IsServiceAccessAllowedResponse, error)
+	GetDeviceTokens(context.Context, *GetDeviceTokensRequest) (*GetDeviceTokensResponse, error)
 	mustEmbedUnimplementedIdentityServiceServer()
 }
 
@@ -128,6 +141,9 @@ func (UnimplementedIdentityServiceServer) GetOrgStatus(context.Context, *GetOrgS
 }
 func (UnimplementedIdentityServiceServer) IsServiceAccessAllowed(context.Context, *IsServiceAccessAllowedRequest) (*IsServiceAccessAllowedResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method IsServiceAccessAllowed not implemented")
+}
+func (UnimplementedIdentityServiceServer) GetDeviceTokens(context.Context, *GetDeviceTokensRequest) (*GetDeviceTokensResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetDeviceTokens not implemented")
 }
 func (UnimplementedIdentityServiceServer) mustEmbedUnimplementedIdentityServiceServer() {}
 func (UnimplementedIdentityServiceServer) testEmbeddedByValue()                         {}
@@ -240,6 +256,24 @@ func _IdentityService_IsServiceAccessAllowed_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _IdentityService_GetDeviceTokens_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDeviceTokensRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdentityServiceServer).GetDeviceTokens(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: IdentityService_GetDeviceTokens_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdentityServiceServer).GetDeviceTokens(ctx, req.(*GetDeviceTokensRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // IdentityService_ServiceDesc is the grpc.ServiceDesc for IdentityService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -267,7 +301,11 @@ var IdentityService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "IsServiceAccessAllowed",
 			Handler:    _IdentityService_IsServiceAccessAllowed_Handler,
 		},
+		{
+			MethodName: "GetDeviceTokens",
+			Handler:    _IdentityService_GetDeviceTokens_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "identity.proto",
+	Metadata: "identity/identity.proto",
 }

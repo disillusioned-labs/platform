@@ -10,6 +10,7 @@ service IdentityService {
   rpc GetUsersInfo(GetUsersInfoRequest) returns (GetUsersInfoResponse);
   rpc GetOrgStatus(GetOrgStatusRequest) returns (GetOrgStatusResponse);
   rpc IsServiceAccessAllowed(IsServiceAccessAllowedRequest) returns (IsServiceAccessAllowedResponse);
+  rpc GetDeviceTokens(GetDeviceTokensRequest) returns (GetDeviceTokensResponse);
 }
 
 // IsMemberActive
@@ -74,4 +75,13 @@ message IsServiceAccessAllowedRequest {
 
 message IsServiceAccessAllowedResponse {
   bool allowed = 1;
+}
+
+// GetDeviceTokens
+message GetDeviceTokensRequest {
+  string user_id = 1;
+}
+
+message GetDeviceTokensResponse {
+  repeated string tokens = 1;  // push tokens of the user's active (non-revoked) devices
 }
