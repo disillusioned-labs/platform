@@ -59,6 +59,15 @@ func New(
 			kgo.ConsumerGroup(cfg.Consumer.Group),
 			kgo.ConsumeTopics(cfg.Consumer.Topics...),
 			kgo.DisableAutoCommit(),
+
+			// Commit all uncommitted offsets when partitions are revoked
+			// (rebalance or graceful shutdown). This is required when
+			// auto-commit is disabled: without this callback, any
+			// processed-but-uncommitted records would be replayed on the
+			// next consumer that inherits these partitions.
+			kgo.OnPartitionsRevoked(func(ctx context.Context, client *kgo.Client, _ map[string][]int32) {
+				client.CommitUncommittedOffsets(ctx)
+			}),
 		)
 	}
 

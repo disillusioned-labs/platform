@@ -82,6 +82,26 @@ func (c *Consumer) CommitRecords(
 	return nil
 }
 
+// CommitUncommitted commits the current uncommitted offsets for all
+// consumed partitions.
+//
+// This is intended for graceful shutdown: when the consumer loop exits due
+// to context cancellation, call this with a fresh context (e.g.
+// context.Background() with a timeout) to flush any processed-but-uncommitted
+// records before the process stops. Without this, the next consumer that
+// inherits these partitions would replay records that were already processed.
+func (c *Consumer) CommitUncommitted(ctx context.Context) error {
+	if c == nil || c.client == nil {
+		return fmt.Errorf("kafka consumer is not initialized")
+	}
+
+	if err := c.client.CommitUncommittedOffsets(ctx); err != nil {
+		return fmt.Errorf("commit uncommitted offsets: %w", err)
+	}
+
+	return nil
+}
+
 func fromKGORecord(record *kgo.Record) Record {
 	headers := make([]RecordHeader, 0, len(record.Headers))
 
